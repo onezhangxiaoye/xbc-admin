@@ -28,19 +28,20 @@
 </template>
 
 <script lang="ts">
-    import {defineComponent, reactive, ref, computed} from "vue";
-    import {Button, Form, Input} from "ant-design-vue";
+    import {computed, defineComponent, reactive, ref, unref} from "vue";
+    import {Button, Form, Input, message} from "ant-design-vue";
     import {LockOutlined, UserOutlined} from '@ant-design/icons-vue';
-    import { useStore } from 'vuex'
+    import {useStore} from 'vuex'
     import {Count} from "../store/store";
-
-    interface LoginFormData {
-        username: string
-        password: string
-    }
+    import {login} from "../moke/moke";
+    import {User} from "../types/User";
+    import {addMenuRouter} from "../router/router";
+    import {useRouter} from "vue-router";
+    import XButton from "../components/XButton.vue";
 
     export default defineComponent({
         components: {
+            XButton,
             AInput: Input,
             UserOutlined,
             LockOutlined,
@@ -53,7 +54,9 @@
 
             const count = computed(() => store.state.count);
 
-            const formData = reactive<LoginFormData>({
+            const router = useRouter();
+
+            const formData = reactive<User>({
                 username: '',
                 password: '',
             })
@@ -83,13 +86,20 @@
                 ]
             };
 
-
             const onSubmit = () => {
 
-                store.commit("setCount", 1)
+                store.commit("setCount", 1);
 
                 formRef.value.validate().then(() => {
-                    console.log(12412);
+                    const user = unref(formData);
+                    login(user).then(res => {
+                        if(res.code) {
+                            addMenuRouter(res.data);
+                            router.push({name: 'home'})
+                        } else {
+                            message.error(res.message);
+                        }
+                    })
                 }).catch(err => {
                     console.log('error', err);
                 });

@@ -1,5 +1,6 @@
 
 import {RouteRecordRaw, createRouter, createWebHashHistory} from "vue-router";
+import {Permission} from "../moke/permissionList";
 
 const routes: RouteRecordRaw[] = [
     {
@@ -18,3 +19,19 @@ export const router = createRouter({
     history: createWebHashHistory(),
     routes,
 })
+
+export function addMenuRouter(list: Permission[]) {
+    menuToRoutes(list).forEach(v => {
+        router.addRoute(v);
+    })
+}
+
+function menuToRoutes(list: Permission[]): RouteRecordRaw[] {
+    return list.map<RouteRecordRaw>(v => {
+        return {
+            name: v.name,
+            path: v.path,
+            component: () => import(`../view/${v.component}.vue`)
+        }
+    })
+}
