@@ -2,6 +2,7 @@ import { createStore } from 'vuex'
 import {login} from "../moke/moke";
 import {User} from "../types/User";
 import {Permission} from "../moke/permissionList";
+import createPersistedState from "vuex-persistedstate";
 
 export interface Count {
     count: number
@@ -31,7 +32,8 @@ const store = createStore<Count>({
                 return res;
             })
         }
-    }
+    },
+    plugins: [createPersistedState()],
 })
 
 export default store;

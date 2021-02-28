@@ -20,6 +20,12 @@ export const router = createRouter({
     routes,
 })
 
+router.beforeEach((to, from, next) => {
+    console.log(to.name);
+
+    next();
+})
+
 export function addMenuRouter(list: Permission[]) {
     menuToRoutes(list).forEach(v => {
         router.addRoute(v);
