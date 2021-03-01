@@ -1,16 +1,19 @@
-import { createStore } from 'vuex'
+import {InjectionKey} from 'vue'
+import { createStore, Store } from 'vuex'
 import {login} from "../moke/moke";
 import {User, UserInfo} from "../types/User";
 import createPersistedState from "vuex-persistedstate";
 import {Permission} from "../types/Permission";
 
-export interface Count {
+export interface State {
     count: number
     permissionList: Permission[]
     username: string
 }
 
-const store = createStore<Count>({
+export const vuexKey: InjectionKey<Store<State>> = Symbol()
+
+const store = createStore<State>({
     state() {
         return {
             count: 0,
@@ -31,7 +34,7 @@ const store = createStore<Count>({
     },
     actions: {
         login({commit}, payload: User) {
-            login(payload).then(res => {
+            return login(payload).then(res => {
                 console.log(res)
                 if(res.code === 1) {
                     const {permissionList, username} = (res.data as UserInfo);

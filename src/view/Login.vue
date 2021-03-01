@@ -32,9 +32,9 @@
     import {Button, Form, Input, message} from "ant-design-vue";
     import {LockOutlined, UserOutlined} from '@ant-design/icons-vue';
     import {useStore} from 'vuex'
-    import {Count} from "../store/store";
-    import {User} from "../types/User";
-    import {addMenuRouter} from "../router/router";
+    import {State, vuexKey} from "../store/store";
+    import {User, UserInfo} from "../types/User";
+    import {addMenuRouter, router} from "../router/router";
     import {useRouter} from "vue-router";
     import XButton from "../components/XButton.vue";
 
@@ -49,9 +49,9 @@
             AFormItem: Form.Item,
         },
         setup() {
-            const store = useStore<Count>();
+            const {state, dispatch, commit} = useStore(vuexKey);
 
-            const count = computed(() => store.state.count);
+            const count = computed(() => state.count);
 
             const router = useRouter();
 
@@ -87,20 +87,21 @@
 
             const onSubmit = () => {
 
-                store.commit("setCount", 1);
+                commit("setCount", 1);
 
                 formRef.value.validate().then(() => {
                     const user = unref(formData);
-                    login(user).then(res => {
+                    dispatch('login', user).then(res => {
                         if(res.code) {
                             addMenuRouter((res.data as UserInfo).permissionList);
+
+                            console.log(router.hasRoute('home'))
+
                             router.push({name: 'home'})
                         } else {
                             message.error(res.message);
                         }
                     })
-                }).catch(err => {
-                    console.log('error', err);
                 });
             };
 

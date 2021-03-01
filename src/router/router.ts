@@ -21,17 +21,20 @@ export const router = createRouter({
     routes,
 })
 
-router.beforeEach((to, from, next) => {
-    console.log(to.name);
+router.onError(error => {
+    console.error('路由异常----',error)
+})
 
-    const {username, permissionList} = store.state;
-    console.log(username);
+router.beforeEach((to, from, next) => {
+    const {username} = store.state;
 
     // 检查登录状态
-    if(username && to.name !== 'login') {
-        addMenuRouter(permissionList);
+    if(!username && to.name !== 'login') {
+        console.log(`未登录用户强制跳转至---登录页`)
+        next({
+            name: 'login'
+        })
     }
-
 
     next();
 })
@@ -50,4 +53,14 @@ function menuToRoutes(list: Permission[]): RouteRecordRaw[] {
             component: () => import(`../view/${v.component}.vue`)
         }
     })
+}
+
+export function initUserRouter() {
+    const {username, permissionList} = store.state;
+    console.log(`初始化用户路由信息---`, username);
+
+    // 检查登录状态
+    if(username && Array.isArray(permissionList)) {
+        addMenuRouter(permissionList);
+    }
 }
