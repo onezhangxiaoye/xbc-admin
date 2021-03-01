@@ -33,7 +33,6 @@
     import {LockOutlined, UserOutlined} from '@ant-design/icons-vue';
     import {useStore} from 'vuex'
     import {Count} from "../store/store";
-    import {login} from "../moke/moke";
     import {User} from "../types/User";
     import {addMenuRouter} from "../router/router";
     import {useRouter} from "vue-router";
@@ -94,7 +93,7 @@
                     const user = unref(formData);
                     login(user).then(res => {
                         if(res.code) {
-                            addMenuRouter(res.data);
+                            addMenuRouter((res.data as UserInfo).permissionList);
                             router.push({name: 'home'})
                         } else {
                             message.error(res.message);

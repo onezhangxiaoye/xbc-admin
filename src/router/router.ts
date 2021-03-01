@@ -1,6 +1,7 @@
 
 import {RouteRecordRaw, createRouter, createWebHashHistory} from "vue-router";
-import {Permission} from "../moke/permissionList";
+import {Permission} from "../types/Permission";
+import store from "../store/store";
 
 const routes: RouteRecordRaw[] = [
     {
@@ -22,6 +23,15 @@ export const router = createRouter({
 
 router.beforeEach((to, from, next) => {
     console.log(to.name);
+
+    const {username, permissionList} = store.state;
+    console.log(username);
+
+    // 检查登录状态
+    if(username && to.name !== 'login') {
+        addMenuRouter(permissionList);
+    }
+
 
     next();
 })

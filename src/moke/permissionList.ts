@@ -1,9 +1,5 @@
+import {Permission} from "../types/Permission";
 
-export interface Permission {
-    name: string
-    path: string
-    component: string
-}
 
 export const permissionList: Permission[] = [
     {

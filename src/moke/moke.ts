@@ -1,5 +1,5 @@
-import {User} from "../types/User";
-import {permissionList, Permission} from "./permissionList";
+import {User, UserInfo} from "../types/User";
+import {permissionList} from "./permissionList";
 
 const admin: User = {
     username: 'admin',
@@ -14,12 +14,15 @@ interface ResponseData<T> {
 
 export function login(user: User) {
 
-    return new Promise<ResponseData<Permission[] | string>>(resolve => {
+    return new Promise<ResponseData<UserInfo | string>>(resolve => {
         if(user.username === admin.username && user.password === admin.password) {
             resolve({
                 message: 'success',
                 code: 1,
-                data: permissionList
+                data: {
+                    username: admin.username,
+                    permissionList,
+                }
             });
         } else {
             resolve({
