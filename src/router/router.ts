@@ -10,9 +10,16 @@ const routes: RouteRecordRaw[] = [
         component: () => import("../view/Login.vue")
     },
     {
-        name: 'testView',
-        path: '/test',
-        component: () => import("../view/TestView.vue")
+        name: 'xbc',
+        path: '/xbc',
+        component: () => import("../view/Xbc.vue"),
+        children: [
+            {
+                name: 'home',
+                path: '/home',
+                component: () => import("../view/Home.vue"),
+            }
+        ]
     },
 ]
 
@@ -47,11 +54,18 @@ export function addMenuRouter(list: Permission[]) {
 
 function menuToRoutes(list: Permission[]): RouteRecordRaw[] {
     return list.map<RouteRecordRaw>(v => {
-        return {
+        const route: RouteRecordRaw = {
             name: v.name,
             path: v.path,
-            component: () => import(`../view/${v.component}.vue`)
+            component: () => import(`../view/${v.component}.vue`),
+            children: []
+        };
+
+        if(v.children) {
+            v.children = menuToRoutes(v.children);
         }
+
+        return route;
     })
 }
 

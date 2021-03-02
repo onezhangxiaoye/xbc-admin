@@ -32,9 +32,9 @@
     import {Button, Form, Input, message} from "ant-design-vue";
     import {LockOutlined, UserOutlined} from '@ant-design/icons-vue';
     import {useStore} from 'vuex'
-    import {State, vuexKey} from "../store/store";
+    import {vuexKey} from "../store/store";
     import {User, UserInfo} from "../types/User";
-    import {addMenuRouter, router} from "../router/router";
+    import {addMenuRouter} from "../router/router";
     import {useRouter} from "vue-router";
     import XButton from "../components/XButton.vue";
 
