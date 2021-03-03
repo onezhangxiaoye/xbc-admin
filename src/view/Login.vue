@@ -1,6 +1,6 @@
 <template>
     <div class="login">
-        <h1>
+        <h1 :style="`--color:${'red'}`">
             Login -- {{ count }}
         </h1>
         <AForm :model="formData" ref="formRef" :rules="rules" layout="vertical">
@@ -124,6 +124,10 @@
 
         .login-password {
             margin: 16px 0;
+        }
+
+        h1 {
+            color: var(--color);
         }
     }
 </style>

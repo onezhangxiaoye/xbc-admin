@@ -7,46 +7,45 @@
                 :openKeys="openKeys"
                 v-model:selectedKeys="selectedKeys"
                 @openChange="onOpenChange"
+                @click="menuItemClick"
             >
-                <ASubMenu key="sub1">
+                <ASubMenu v-for="menu in menus" :key="menu.name">
                     <template #title>
-                          <span>
-                            <span>Navigation One</span>
-                          </span>
+                          <span>{{ menu.meta.desc }}</span>
                     </template>
-                    <a-menu-item key="1">Option 1</a-menu-item>
-                    <a-menu-item key="2">Option 2</a-menu-item>
-                    <a-menu-item key="3">Option 3</a-menu-item>
-                </ASubMenu>
-                <ASubMenu key="sub2">
-                    <template #title>
-                          <span>
-                            <span>Navigation Two</span>
-                          </span>
-                    </template>
-                    <a-menu-item key="4">Option 1</a-menu-item>
-                    <a-menu-item key="5">Option 2</a-menu-item>
-                    <a-menu-item key="6">Option 3</a-menu-item>
+                    <a-menu-item v-for="menuItem in menu.children" :key="menuItem.name">
+                        {{ menuItem.meta.desc }}
+                    </a-menu-item>
                 </ASubMenu>
             </AMenu>
         </div>
         <div class="home-content">
+            <LoginOutButton />
             <RouterView />
         </div>
     </div>
 </template>
 
 <script lang="ts">
-    import {computed, defineComponent, reactive, toRefs, unref} from "vue";
+    import {defineComponent, reactive, toRefs} from "vue";
     import {Menu} from "ant-design-vue";
+    import {useStore} from "vuex";
+    import {vuexKey} from "../store/store";
+    import LoginOutButton from "../components/LoginOutButton.vue";
+    import {useRouter} from "vue-router";
 
     export default defineComponent({
         components: {
+            LoginOutButton,
             AMenu: Menu,
             ASubMenu: Menu.SubMenu,
             AMenuItem: Menu.Item,
         },
         setup() {
+
+            const {state: {permissionList: menus}} = useStore(vuexKey);
+            const router = useRouter();
+
             const state = reactive({
                 rootSubmenuKeys: ['sub1', 'sub2', 'sub4'],
                 openKeys: ['sub1'],
@@ -62,9 +61,15 @@
                 }
             }
 
+            function menuItemClick({ key }: {key: string}) {
+                router.push({name: key})
+            }
+
             return {
                 ...toRefs(state),
                 onOpenChange,
+                menus,
+                menuItemClick,
             }
         },
     })

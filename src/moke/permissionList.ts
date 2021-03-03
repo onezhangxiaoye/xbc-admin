@@ -4,15 +4,15 @@ import {Permission} from "../types/Permission";
 export const permissionList: Permission[] = [
     {
         name: 'menu1',
-        path: '/menu1',
-        component: 'Menu1',
+        path: '/xbc/menu1',
+        component: 'Xbc',
         meta: {
             desc: '菜单1'
         },
         children: [
             {
                 name: 'page1',
-                path: '/page1',
+                path: '/xbc/menu1/page1',
                 component: 'Page1',
                 meta: {
                     desc: '分页1'
@@ -20,7 +20,7 @@ export const permissionList: Permission[] = [
             },
             {
                 name: 'page2',
-                path: '/page2',
+                path: '/xbc/menu1/page2',
                 component: 'Page2',
                 meta: {
                     desc: '分页2'
@@ -28,7 +28,7 @@ export const permissionList: Permission[] = [
             },
             {
                 name: 'page3',
-                path: '/page3',
+                path: '/xbc/menu1/page3',
                 component: 'Page3',
                 meta: {
                     desc: '分页3'
@@ -38,15 +38,15 @@ export const permissionList: Permission[] = [
     },
     {
         name: 'menu2',
-        path: '/menu2',
-        component: 'Menu2',
+        path: '/xbc/menu2',
+        component: 'Xbc',
         meta: {
             desc: '菜单2'
         },
         children: [
             {
                 name: 'page4',
-                path: '/page4',
+                path: '/xbc/menu2/page4',
                 component: 'Page4',
                 meta: {
                     desc: '分页4'
@@ -54,7 +54,7 @@ export const permissionList: Permission[] = [
             },
             {
                 name: 'page5',
-                path: '/page5',
+                path: '/xbc/menu2/page5',
                 component: 'Page5',
                 meta: {
                     desc: '分页5'
@@ -62,7 +62,7 @@ export const permissionList: Permission[] = [
             },
             {
                 name: 'page6',
-                path: '/page6',
+                path: '/xbc/menu2/page6',
                 component: 'Page6',
                 meta: {
                     desc: '分页6'

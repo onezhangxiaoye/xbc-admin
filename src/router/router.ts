@@ -16,7 +16,7 @@ const routes: RouteRecordRaw[] = [
         children: [
             {
                 name: 'home',
-                path: '/home',
+                path: '/xbc/home',
                 component: () => import("../view/Home.vue"),
             }
         ]
@@ -35,21 +35,42 @@ router.onError(error => {
 router.beforeEach((to, from, next) => {
     const {username} = store.state;
 
+    // 前往登录页 重置登录状态和菜单数据
+    if(to.name === 'login') {
+        store.commit('setUsername', '');
+        store.commit('setPermissionList', []);
+    }
+
     // 检查登录状态
     if(!username && to.name !== 'login') {
         console.log(`未登录用户强制跳转至---登录页`)
         next({
             name: 'login'
         })
+    } else {
+        next();
     }
-
-    next();
 })
 
+let menuRouterNames: string[] = [];
+
 export function addMenuRouter(list: Permission[]) {
-    menuToRoutes(list).forEach(v => {
-        router.addRoute(v);
+    const childrenRoutes = list.reduce((a: Permission[], b: Permission) => {
+        if(Array.isArray(b.children)) {
+            a.push(...b.children);
+        }
+        return a;
+    }, [])
+    menuToRoutes(childrenRoutes).forEach(v => {
+        router.addRoute('xbc', v);
     })
+}
+
+export function removeMenuRouter() {
+    for (const menuRouterName of menuRouterNames) {
+        // 二级路由在移除他的父级时会被移除 开发环境下会又警告
+        router.removeRoute(menuRouterName);
+    }
 }
 
 function menuToRoutes(list: Permission[]): RouteRecordRaw[] {
@@ -61,8 +82,10 @@ function menuToRoutes(list: Permission[]): RouteRecordRaw[] {
             children: []
         };
 
+        menuRouterNames.push(v.name);
+
         if(v.children) {
-            v.children = menuToRoutes(v.children);
+            route.children = menuToRoutes(v.children);
         }
 
         return route;
@@ -71,7 +94,7 @@ function menuToRoutes(list: Permission[]): RouteRecordRaw[] {
 
 export function initUserRouter() {
     const {username, permissionList} = store.state;
-    console.log(`初始化用户路由信息---`, username);
+    console.log(`初始化用户路由信息---`, username || '未登录状态，不进行初始化');
 
     // 检查登录状态
     if(username && Array.isArray(permissionList)) {
