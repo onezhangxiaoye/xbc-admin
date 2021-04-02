@@ -42,9 +42,9 @@
             watchEffect(function () {
 
                 const routeName: string = route.name as string;
+                activeKey.value = routeName;
 
                 if(!routeMap.has(routeName)){
-                    activeKey.value = routeName;
                     routeMap.set(routeName, {
                         name: routeName,
                         path: route.path,
