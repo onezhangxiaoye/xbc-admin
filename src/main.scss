@@ -1,0 +1,21 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  width: 100vw;
+  height: 100vh;
+}
+
+#app {
+  height: 100%;
+}
+
+.home-menu .ant-menu {
+  background: transparent;
+}
+
+.ant-tabs-nav .ant-tabs-tab-active {
+  font-weight: normal;
+}
