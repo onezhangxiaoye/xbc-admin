@@ -5,10 +5,18 @@ import {User, UserInfo} from "../types/User";
 import createPersistedState from "vuex-persistedstate";
 import {Permission} from "../types/Permission";
 
+interface NavRouter {
+    name: string
+    path: string
+    closable: boolean
+}
+type RouterMap =  Map<string, NavRouter>
+
 export interface State {
     count: number
     permissionList: Permission[]
     username: string
+    routeMap: RouterMap
 }
 
 export const vuexKey: InjectionKey<Store<State>> = Symbol()
@@ -19,6 +27,7 @@ const store = createStore<State>({
             count: 0,
             permissionList: [],
             username: '',
+            routeMap: new Map<string, NavRouter>(),
         }
     },
     mutations: {
@@ -30,6 +39,9 @@ const store = createStore<State>({
         },
         setUsername(state, payload) {
             state.username = payload;
+        },
+        setRouterMap(state, {routeName, route}: {routeName: string, route: NavRouter}) {
+            state.routeMap.set(routeName, route);
         },
     },
     actions: {
